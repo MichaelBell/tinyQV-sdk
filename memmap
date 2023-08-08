@@ -1,0 +1,39 @@
+MEMORY
+{
+    ram(rwx) : ORIGIN = 0x0, LENGTH = 0x10000
+}
+SECTIONS
+{
+    .boot : { *(.boot*)
+        KEEP (*(.boot))
+    } > ram
+    .sdata : { *(.sdata*) *(.srodata*)
+        PROVIDE( __global_pointer$ = 0x1000 );
+    } > ram
+    .sbss : { 
+        . = ALIGN(4);
+        __sbss_start__ = .;
+        *(.sbss*)
+        . = ALIGN(4);
+        __sbss_end__ = .;
+    } > ram
+    .text : { *(.text*) } > ram
+    .data : { *(.data*) *(.rodata*) } > ram
+    .bss : { 
+        . = ALIGN(4);
+        __bss_start__ = .;
+        *(.bss*)
+        . = ALIGN(4);
+        __bss_end__ = .;
+    } > ram
+    .heap (NOLOAD):
+    {
+        __HeapStart = .;
+        KEEP(*(.heap*))
+        __HeapLimit = .;
+    } > ram
+
+    __StackTop = ORIGIN(ram) + LENGTH(ram);
+    __StackLimit = __StackTop - 0x200;
+    ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed")
+}
