@@ -1,0 +1,19 @@
+NAME=example
+
+all: $(NAME).hex
+
+clean:
+	rm *.o *.elf tmp.rbin *.bin
+
+%.o: %.c
+	riscv32-unknown-elf-gcc -O2 -I../nanoV-sdk/ -march=rv32e -mabi=ilp32e -nostdlib -nostartfiles -ffreestanding -ffunction-sections -fdata-sections -lc -c $< -o $@
+
+%.o: %.s
+	riscv32-unknown-elf-as -march=rv32e -mabi=ilp32e $< -o $@
+
+$(NAME).elf: main.o
+	riscv32-unknown-elf-ld $^ ../nanoV-sdk/start.o /opt/riscv/riscv32-unknown-elf/lib/libc.a ../nanoV-sdk/nanoV.a /opt/riscv/lib/gcc/riscv32-unknown-elf/12.2.0/libgcc.a  -T ../nanoV-sdk/memmap --gc-sections -o $@
+
+$(NAME).bin: $(NAME).elf
+	riscv32-unknown-elf-objcopy $< -O binary tmp.rbin
+	python3 ../nanoV-sdk/reverse_bits.py tmp.rbin $@
