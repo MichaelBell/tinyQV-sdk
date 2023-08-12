@@ -24,13 +24,3 @@ uart_is_char_available:
     srli a0, a0, 1
     andi a0, a0, 1
     ret
-
-.globl set_outputs
-set_outputs:
-    sw a0, (tp)
-    ret
-
-.globl get_inputs
-get_inputs:
-    lw a0, (tp)
-    ret

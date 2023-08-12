@@ -1,6 +1,6 @@
 NAME=example
 
-all: $(NAME).hex
+all: $(NAME).bin
 
 clean:
 	rm *.o *.elf tmp.rbin *.bin
