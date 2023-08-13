@@ -4,7 +4,7 @@ clean:
 	rm *.o *.a
 
 %.o: %.c 
-	riscv32-unknown-elf-gcc -O2 -march=rv32e -mabi=ilp32e -nostdlib -nostartfiles -ffreestanding -ffunction-sections -fdata-sections -lc -c $< -o $@	
+	riscv32-unknown-elf-gcc -O2 -march=rv32e -mabi=ilp32e -mno-strict-align -nostdlib -nostartfiles -ffreestanding -ffunction-sections -fdata-sections -lc -c $< -o $@
 
 %.o: %.s
 	riscv32-unknown-elf-as -march=rv32em -mabi=ilp32e $< -o $@
