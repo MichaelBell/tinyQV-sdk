@@ -32,3 +32,16 @@ inline static uint32_t get_leds()
     asm( "lw %[value], 8(tp)" : [value] "=r" (value) : : "memory");
     return value;
 }
+
+inline static void set_midi_note(uint32_t value)
+{
+    asm( "sw %[value], 0x20(tp)" : : [value] "r" (value) : "memory");
+}
+
+inline static uint32_t get_midi_note()
+{
+    uint32_t value;
+    asm( "lw %[value], 0x20(tp)" : [value] "=r" (value) : : "memory");
+    return value;
+}
+
