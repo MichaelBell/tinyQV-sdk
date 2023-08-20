@@ -17,7 +17,7 @@ inline static uint32_t get_outputs()
 inline static uint32_t get_inputs()
 {
     uint32_t value;
-    asm( "lw %[value], 4(tp)" : [value] "=r" (value) : : "memory");
+    asm volatile ( "lw %[value], 4(tp)" : [value] "=r" (value) : : "memory");
     return value;
 }
 
