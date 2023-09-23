@@ -1,8 +1,8 @@
 .section .text
-.globl mul32x16
-mul32x16:
-    mul a0, a0, a1
-    ret
+;.globl mul32x16
+;mul32x16:
+;    mul a0, a0, a1
+;    ret
 
 .globl mul32x32
 .globl __mulsi3

@@ -1,4 +1,4 @@
-all: nanoV.a nanoV-pico.a start.o
+all: nanoV.a nanoV-femto.a start.o
 
 clean:
 	rm *.o *.a
@@ -12,6 +12,6 @@ clean:
 nanoV.a: uart.o mul.o peripheral.o runtime.o soft-spi.o
 	riscv32-unknown-elf-ar rcs $@ $^ /opt/riscv/lib/gcc/riscv32-unknown-elf/12.2.0/libgcc.a
 
-nanoV-pico.a: uart.o peripheral.o runtime.o soft-spi.o
+nanoV-femto.a: uart.o peripheral.o runtime.o soft-spi.o
 	riscv32-unknown-elf-ar rcs $@ $^ /opt/riscv/lib/gcc/riscv32-unknown-elf/12.2.0/libgcc.a
 
