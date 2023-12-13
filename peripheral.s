@@ -1,7 +1,6 @@
 .section .text
-.globl uart_putc, uart_putc2
+.globl uart_putc
 uart_putc:
-uart_putc2:
     lw a5, 0x14(tp)
     andi a5, a5, 1
     bnez a5, uart_putc
