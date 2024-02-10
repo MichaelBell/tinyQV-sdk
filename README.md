@@ -1,6 +1,6 @@
-# NanoV SDK: Minimal area RISC-V core and accessories
+# TinyQV SDK: Minimal area RISC-V core and accessories
 
-C SDK for the [nanoV](https://github.com/MichaelBell/nanoV/) bit serial RISC-V core and integrated SPI memory controller.
+C SDK for the [tinyQV](https://github.com/MichaelBell/tinyQV/) quad serial RISC-V SoC.
 
 ## Compiling a project
 

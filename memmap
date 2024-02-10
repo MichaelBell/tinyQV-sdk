@@ -1,39 +1,44 @@
 MEMORY
 {
-    ram(rwx) : ORIGIN = 0x0, LENGTH = 0x20000
+    rom(rx)   : ORIGIN = 0x0,       LENGTH = 0x4000 /* 0x1000000 */
+    ram_a(rw) : ORIGIN = 0x1000000, LENGTH = 0x2000 /* 0x0800000 */
+    ram_b(rw) : ORIGIN = 0x1800000, LENGTH = 0x2000 /* 0x0800000 */
 }
 SECTIONS
 {
     .boot : { *(.boot*)
         KEEP (*(.boot))
-    } > ram
-    .sdata : { *(.sdata*) *(.srodata*)
-        PROVIDE( __global_pointer$ = 0x1000 );
-    } > ram
-    .sbss : { 
+    } > rom
+    .srodata : { *(.srodata*) } > rom
+    .text : { *(.text*) } > rom
+    .rodata : { *(.rodata*) } > rom
+
+    .data : { 
         . = ALIGN(4);
-        __sbss_start__ = .;
-        *(.sbss*)
+        __data_start__ = .;
+        *(.sdata*) *(.data*) 
         . = ALIGN(4);
-        __sbss_end__ = .;
-    } > ram
-    .text : { *(.text*) } > ram
-    .data : { *(.data*) *(.rodata*) } > ram
+        __data_end__ = .;
+    } > ram_a AT> rom
+    __etext = LOADADDR(.data);
+
     .bss : { 
         . = ALIGN(4);
         __bss_start__ = .;
-        *(.bss*)
+        *(.sbss*) *(.bss*)
         . = ALIGN(4);
         __bss_end__ = .;
-    } > ram
+    } > ram_a
+
     .heap (NOLOAD):
     {
         __HeapStart = .;
         KEEP(*(.heap*))
         __HeapLimit = .;
-    } > ram
+    } > ram_b
 
-    __StackTop = ORIGIN(ram) + LENGTH(ram);
-    __StackLimit = __StackTop - 0x2000;
-    ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed")
+    __global_pointer$ = 0x1000;
+    __StackTop = ORIGIN(ram_a) + LENGTH(ram_a);
+    __StackLimit = __StackTop - 0x1000;
+    ASSERT(__StackLimit >= __bss_end__, "region RAM overflowed")
 }

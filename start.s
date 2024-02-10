@@ -1,9 +1,9 @@
 .section .boot,"ax"
 .globl _start
 _start:
-    li gp, 0x1000
-    li tp, 0x10000000
+    li gp, 0x1000       # These required if testing against
+    li tp, 0x8000000    # a different Risc-V core, but do no harm on TinyQV
     la sp, __StackTop
-    jal _bss_init
+    jal __data_init
     jal main
     j .
