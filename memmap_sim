@@ -1,8 +1,8 @@
 MEMORY
 {
-    rom(rx)   : ORIGIN = 0x0,       LENGTH = 0x1000000
-    ram_a(rw) : ORIGIN = 0x1000000, LENGTH = 0x0800000
-    ram_b(rw) : ORIGIN = 0x1800000, LENGTH = 0x0800000
+    rom(rx)   : ORIGIN = 0x0,       LENGTH = 0x8000
+    ram_a(rw) : ORIGIN = 0x1000000, LENGTH = 0x2000
+    ram_b(rw) : ORIGIN = 0x1800000, LENGTH = 0x2000
 }
 SECTIONS
 {

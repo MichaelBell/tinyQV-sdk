@@ -14,6 +14,8 @@ extern uint32_t __data_start__;
 extern uint32_t __data_end__;
 extern uint32_t __etext;
 
+int __errno;
+
 void __data_init(void) {
     for (uint32_t* ptr = &__bss_start__; ptr < &__bss_end__; ) *ptr++ = 0;
     
