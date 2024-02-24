@@ -28,3 +28,11 @@ uart_is_char_available:
     srli a0, a0, 1
     andi a0, a0, 1
     ret
+
+.globl debug_uart_putc
+debug_uart_putc:
+    .insn ci 2, 3, a5, 0x1c
+    andi a5, a5, 1
+    bnez a5, debug_uart_putc
+    .insn css 2, 7, a0, 0x18
+    ret

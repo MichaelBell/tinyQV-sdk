@@ -8,16 +8,16 @@
 .globl __mulsi3
 mul32x32:
 __mulsi3:
-    mul a5, a0, a1
+    mul a2, a0, a1
     srai a1, a1, 16
     #mul a0, a0, a1
     .insn cr 2, 10, a0, a1
     slli a0, a0, 16
-    add a0, a0, a5
+    add a0, a0, a2
     ret
 
-.globl __muldi3
-__muldi3:
+#.globl __muldi3
+__muldi3_unused:
     li a5, 0xFFFF
     and a5, a0, a5
     srli a4, a0, 16

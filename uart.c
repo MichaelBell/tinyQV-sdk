@@ -12,9 +12,31 @@
 #define NANOPRINTF_IMPLEMENTATION
 #include "nanoprintf.h"
 
-void uart_putc2(int c, void*) {
-    uart_putc(c);
+static void uart_putc2(int c, void*) {
     if (c == '\n') uart_putc('\r');
+    uart_putc(c);
+}
+
+void uart_puts(const char* c) {
+    while (*c) {
+        uart_putc(*c++);
+    }
+    uart_putc('\r');
+    uart_putc('\n');
+}
+
+void uart_put_buffer(const char* c, int len) {
+    while (len-- > 0) {
+        if (*c == '\n') uart_putc('\r');
+        uart_putc(*c++);
+    }
+}
+
+void debug_uart_put_buffer(const char* c, int len) {
+    while (len-- > 0) {
+        if (*c == '\n') debug_uart_putc('\r');
+        debug_uart_putc(*c++);
+    }
 }
 
 int uart_printf(const char *fmt, ...) {
