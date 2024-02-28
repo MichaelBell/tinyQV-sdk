@@ -6,12 +6,33 @@ MEMORY
 }
 SECTIONS
 {
-    .boot : { *(.boot*)
-        KEEP (*(.boot))
+    .boot : { *(.boot) 
+        KEEP (*(.boot)) 
+    } > rom
+    .vectors 0x40 : {
+        KEEP (*(.vectors))
     } > rom
     .srodata : { *(.srodata*) } > rom
+    .isrs : { *(.isrs*)
+        KEEP (*(.isrs))
+    } > rom
     .text : { *(.text*) } > rom
     .rodata : { *(.rodata*) } > rom
+
+    .peri : {
+        . = ALIGN(4);
+        __peri_data_start__ = .;
+        *(.peri_data*)
+        . = ALIGN(4);
+        __peri_data_end__ = .;
+        *(.peri_bss*)
+    } > ram_a AT> rom
+    __peri_lma = LOADADDR(.peri);
+
+
+    .scratch 0x1000200 : {
+        . += 0xc0;
+    } > ram_a
 
     .data : { 
         . = ALIGN(4);
@@ -20,7 +41,7 @@ SECTIONS
         . = ALIGN(4);
         __data_end__ = .;
     } > ram_a AT> rom
-    __etext = LOADADDR(.data);
+    __data_lma = LOADADDR(.data);
 
     .bss : { 
         . = ALIGN(4);
