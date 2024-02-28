@@ -46,3 +46,7 @@ int uart_printf(const char *fmt, ...) {
     va_end(val);
     return rv;
 }
+
+char uart_buffer[64];
+char* uart_write_ptr = uart_buffer;
+char* uart_read_ptr = uart_buffer;

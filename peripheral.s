@@ -1,13 +1,4 @@
 .section .text
-.globl uart_putc
-uart_putc:
-    #lw a5, 0x14(tp)
-    .insn ci 2, 3, a5, 0x14
-    andi a5, a5, 1
-    bnez a5, uart_putc
-    #sw a0, 0x10(tp)
-    .insn css 2, 7, a0, 0x10
-    ret
 
 .globl uart_getc
 uart_getc:

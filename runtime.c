@@ -18,11 +18,11 @@ extern uint32_t __etext;
 
 //int __errno;
 
-void __data_init(void) {
+void __runtime_init(void) {
     for (uint32_t* ptr = &__bss_start__; ptr < &__bss_end__; ) *ptr++ = 0;
     
     uint32_t* load_ptr = &__etext;
-    for (uint32_t* ptr = &__data_start__; ptr < &__data_end__; ) *ptr++ = *load_ptr++; 
+    for (uint32_t* ptr = &__data_start__; ptr < &__data_end__; ) *ptr++ = *load_ptr++;
 }
 
 void *_sbrk(int incr) {

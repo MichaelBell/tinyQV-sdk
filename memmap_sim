@@ -6,12 +6,22 @@ MEMORY
 }
 SECTIONS
 {
-    .boot : { *(.boot*)
-        KEEP (*(.boot))
+    .boot : { *(.boot) 
+        KEEP (*(.boot)) 
+    } > rom
+    .vectors 0x40 : {
+        KEEP (*(.vectors))
     } > rom
     .srodata : { *(.srodata*) } > rom
+    .isrs : { *(.isrs*)
+        KEEP (*(.isrs))
+    } > rom
     .text : { *(.text*) } > rom
     .rodata : { *(.rodata*) } > rom
+
+    .scratch : {
+        . += 0x300;
+    } > ram_a
 
     .data : { 
         . = ALIGN(4);
