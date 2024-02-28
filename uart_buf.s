@@ -1,25 +1,27 @@
+.include "macros.s"
+
 .set UART_BUF_SIZE, 64
 
 .section .text
-.globl isr_uart_writable  # Note no stack, and only use a0 and a1, return address in s1
+.globl isr_uart_writable  # Note no stack, and only use a0 and s1
 isr_uart_writable:
     # Load read and write pointers.  If equal, nothing more to send
-    lw a1, uart_write_ptr
+    lw s1, uart_write_ptr
     lw a0, uart_read_ptr
-    beq a0, a1, 1f
+    beq a0, s1, 1f
 
     # Send the byte to the UART
-    lb a1, (a0)
-    .insn css 2, 7, a1, 0x10
+    lb s1, (a0)
+    .insn css 2, 7, s1, 0x10
 
     # Increment read pointer and compare with end of buffer
     addi a0, a0, 1
-    la a1, uart_buffer + UART_BUF_SIZE
-    beq a0, a1, 2f
+    la s1, uart_buffer + UART_BUF_SIZE
+    beq a0, s1, 2f
 3:
     # Store the incremented read pointer
-    sw a0, uart_read_ptr, a1
-    jalr x0, (s1)
+    sw a0, uart_read_ptr, s1
+    isr_exit
 2:
     la a0, uart_buffer
     j 3b
@@ -28,7 +30,7 @@ isr_uart_writable:
     # Nothing more to send, disable interrupt
     li a0, 0x80000
     csrc mie, a0
-    jalr x0, (s1)
+    isr_exit
 
 .globl uart_putc
 uart_putc:
