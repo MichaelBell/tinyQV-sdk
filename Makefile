@@ -16,4 +16,4 @@ clean:
 	$(AS) -march=rv32emc_zicsr -mabi=ilp32e $< -o $@
 
 tinyQV.a: uart.o uart_buf.o mul.o isqrt.o peripheral.o runtime.o
-	$(AR) rcs $@ $^ /opt/riscv/lib/gcc/riscv32-unknown-elf/12.2.0/libgcc.a
+	$(AR) rcs $@ $^ $(RISCV_TOOLCHAIN)/lib/gcc/riscv32-unknown-elf/*/libgcc.a
