@@ -14,6 +14,7 @@ jobs:
 
     - name: setup toolchain
       run: |
+        mkdir toolchain
         cd toolchain
         wget https://github.com/MichaelBell/riscv-gnu-toolchain/releases/download/13.2.0-0.1/riscv32ec-13.2.0-0.1.tar.gz
         tar xzf riscv32ec*.tar.gz
