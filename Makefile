@@ -1,4 +1,4 @@
-RISCV_TOOLCHAIN ?= /opt/riscv
+RISCV_TOOLCHAIN ?= /opt/tinyQV
 
 CC = $(RISCV_TOOLCHAIN)/bin/riscv32-unknown-elf-gcc
 AS = $(RISCV_TOOLCHAIN)/bin/riscv32-unknown-elf-as
