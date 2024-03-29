@@ -16,7 +16,6 @@ inline static uint32_t read_time() {
     return r;
 }
 
-
 inline static uint32_t read_instret() {
     int r;
     asm volatile ("rdinstret %0" :
@@ -25,3 +24,11 @@ inline static uint32_t read_instret() {
     return r;
 }
 
+inline static void delay_us(uint32_t us) {
+    uint32_t end_time = read_time() + us;
+
+    while (1) {
+        uint32_t time_diff = end_time - read_time();
+        if ((int)time_diff <= 0) break;
+    }
+}

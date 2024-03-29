@@ -35,19 +35,19 @@ SECTIONS
     } > ram_a
 
     .data : { 
-        . = ALIGN(4);
+        . = ALIGN(16);
         __data_start__ = .;
         *(.sdata*) *(.data*) 
-        . = ALIGN(4);
+        . = ALIGN(16);
         __data_end__ = .;
     } > ram_a AT> rom
     __data_lma = LOADADDR(.data);
 
     .bss : { 
-        . = ALIGN(4);
+        . = ALIGN(16);
         __bss_start__ = .;
         *(.sbss*) *(.bss*)
-        . = ALIGN(4);
+        . = ALIGN(16);
         __bss_end__ = .;
     } > ram_a
 

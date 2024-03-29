@@ -6,13 +6,12 @@
 .globl isr_uart_writable  # Note no stack, and only use a0 and s1
 isr_uart_writable:
     # Load read and write pointers.  If equal, nothing more to send
-    lw s1, uart_write_ptr
-    lw a0, uart_read_ptr
+    lw2 s1, uart_write_ptr
     beq a0, s1, 1f
 
     # Send the byte to the UART
     lb s1, (a0)
-    .insn css 2, 7, s1, 0x10
+    sw s1, 0x10(tp)
 
     # Increment read pointer and compare with end of buffer
     addi a0, a0, 1
@@ -34,23 +33,22 @@ isr_uart_writable:
 
 .globl uart_putc
 uart_putc:
-    la a2, uart_buffer + UART_BUF_SIZE
+    la a4, uart_buffer + UART_BUF_SIZE
 
     # Disable interrupts as uart buffer ptrs aren't locked
     li a3, 0x8
     csrc mstatus, a3
 
-    # Load the write pointer and store the byte
-    lw a1, uart_write_ptr
+    # Load the pointers and store the byte
+    lw2 a1, uart_write_ptr
     sb a0, (a1)
 
     # Increment the write pointer
     addi a1, a1, 1
-    beq a1, a2, 1f
+    beq a1, a4, 1f
 2:
     # Check if we've caught up with the read pointer
-    lw a4, uart_read_ptr
-    beq a4, a1, 3f
+    beq a2, a1, 3f
 
 5:
     # Store the incremented write pointer, re-enable interrupts
@@ -67,9 +65,15 @@ uart_putc:
     # Re-enable interrupts and wait for read pointer to change
     csrs mstatus, a3
 4:
-    lw a2, uart_read_ptr
+    lw a4, uart_read_ptr
     beq a2, a4, 4b
 
     # Disable interrupts to protect re-enabling the writable interrup
     csrc mstatus, a3
     j 5b
+
+.section .peri_data.uart, "a"
+uart_write_ptr:
+    .word uart_buffer
+uart_read_ptr:
+    .word uart_buffer

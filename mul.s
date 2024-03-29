@@ -1,46 +1,38 @@
 .section .text
-;.globl mul32x16
-;mul32x16:
-;    mul a0, a0, a1
-;    ret
 
 .globl mul32x32
 .globl __mulsi3
 mul32x32:
 __mulsi3:
-    mul a2, a0, a1
+    mul16 a2, a0, a1
     srai a1, a1, 16
-    #mul a0, a0, a1
-    .insn cr 2, 10, a0, a1
+    mul16 a0, a0, a1
     slli a0, a0, 16
     add a0, a0, a2
     ret
 
-#.globl __muldi3
-__muldi3_unused:
+.globl __muldi3
+__muldi3:
     li a5, 0xFFFF
     and a5, a0, a5
     srli a4, a0, 16
-    mul t0, a5, a2
+    mul16 t0, a5, a2
     sw t0, -4(sp)
-    mul t0, a4, a2
-    mul t2, a1, a2
+    mul16 t0, a4, a2
+    mul16 t2, a1, a2
     srli a2, a2, 16
-    #mul a5, a5, a2
-    .insn cr 2, 10, a5, a2
+    mul16 a5, a5, a2
     add t1, t0, a5
     sltu t0, t1, t0
     slli t0, t0, 16
     add t2, t2, t0
     slli a1, a1, 16
     or a4, a4, a1
-    #mul a4, a4, a2
-    .insn cr 2, 10, a4, a2
+    mul16 a4, a4, a2
     add t2, t2, a4
-    mul a5, a0, a3
+    mul16 a5, a0, a3
     srli a3, a3, 16
-    #mul a0, a0, a3
-    .insn cr 2, 10, a0, a3
+    mul16 a0, a0, a3
     slli a0, a0, 16
     add a0, a0, a5
     add a1, a0, t2
@@ -52,4 +44,3 @@ __muldi3_unused:
     srli t1, t1, 16
     add a1, a1, t1
     ret
-    

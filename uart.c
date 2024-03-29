@@ -48,5 +48,3 @@ int uart_printf(const char *fmt, ...) {
 }
 
 char __attribute__((section(".peri_bss.uart"))) uart_buffer[64];
-char* __attribute__((section(".peri_data.uart"))) uart_write_ptr = uart_buffer;
-char* __attribute__((section(".peri_data.uart"))) uart_read_ptr = uart_buffer;
