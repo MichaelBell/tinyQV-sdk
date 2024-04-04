@@ -10,7 +10,7 @@ isr_uart_writable:
     beq a0, s1, 1f
 
     # Send the byte to the UART
-    lb s1, (a0)
+    lbu s1, (a0)
     sw s1, 0x10(tp)
 
     # Increment read pointer and compare with end of buffer
