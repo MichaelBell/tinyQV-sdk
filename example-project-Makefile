@@ -1,5 +1,7 @@
 NAME=example
 
+RISCV_TOOLCHAIN ?= /opt/tinyQV
+
 TINYQV_SDK=../../tinyQV-sdk
 
 all: $(NAME).bin $(NAME).hex
@@ -14,7 +16,7 @@ clean:
 	riscv32-unknown-elf-as -march=rv32ec_zcb -mabi=ilp32e $< -o $@
 
 $(NAME).elf: main.o
-	riscv32-unknown-elf-ld $^ $(TINYQV_SDK)/start.o /opt/riscv/riscv32-unknown-elf/lib/libc.a $(TINYQV_SDK)/tinyQV.a /opt/riscv/lib/gcc/riscv32-unknown-elf/12.2.0/libgcc.a  -T $(TINYQV_SDK)/memmap --gc-sections -o $@
+	riscv32-unknown-elf-ld $^ $(TINYQV_SDK)/start.o $(TINYQV_SDK)/tinyQV.a $(RISCV_TOOLCHAIN)/riscv32-unknown-elf/lib/libc.a $(RISCV_TOOLCHAIN)/lib/gcc/riscv32-unknown-elf/*/libgcc.a  -T $(TINYQV_SDK)/memmap --gc-sections -o $@
 
 $(NAME).bin: $(NAME).elf
 	riscv32-unknown-elf-objcopy $< -O binary $@

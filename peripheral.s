@@ -46,7 +46,7 @@ spi_send_recv_data:
     lw a0, 0x20(tp)
     ret
 
-.globl spi_set_divider
-spi_set_divider:
+.globl spi_set_config
+spi_set_config:
     sw a0, 0x24(tp)
     ret

@@ -14,6 +14,18 @@ inline static uint32_t get_outputs()
     return value;
 }
 
+inline static void gpio_on(int gpio)
+{
+    uint32_t val = get_outputs() | (1 << gpio);
+    set_outputs(val);
+}
+
+inline static void gpio_off(int gpio)
+{
+    uint32_t val = get_outputs() & (~(1 << gpio));
+    set_outputs(val);
+}
+
 inline static uint32_t get_inputs()
 {
     uint32_t value;
