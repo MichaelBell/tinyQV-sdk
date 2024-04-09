@@ -22,3 +22,14 @@ jobs:
     - name: build
       run: |
         RISCV_TOOLCHAIN=$PWD/toolchain/riscv make
+        cd pngdec
+        RISCV_TOOLCHAIN=$PWD/../toolchain/riscv make
+
+    - name: upload libs
+      uses: actions/upload-artifact@v4
+      with:
+        name: tinyQV-sdk
+        path: |
+          tinyQV.a
+          tinyQV-sd.a
+          pngdec/tinyQV-pngdec.a
