@@ -104,7 +104,7 @@ void init_spi(void)
 
 	uint32_t gpio_sel = get_gpio_sel();
 	gpio_sel |=  0b10000000;
-	gpio_sel &= ~0b00111000;
+	gpio_sel &= ~0b00101000;
 	set_gpio_sel(gpio_sel);
 	printf("Set GPIO sel %02lx\n", gpio_sel);
 }
