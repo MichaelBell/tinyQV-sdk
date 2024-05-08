@@ -1,5 +1,4 @@
 #include "isqrt.h"
-#include "mul.h"
 
 uint32_t isqrt(uint32_t n) {
     if (n == 0) return 0;
@@ -15,7 +14,7 @@ uint32_t isqrt(uint32_t n) {
     uint32_t mid = (lo + hi) >> 1;
 
     while (lo <= hi) {
-        uint32_t midsq = mul32x16(mid, mid);
+        uint32_t midsq = mid*mid;
         if (midsq == n) return mid;
         if (midsq < n) {
             lo = mid + 1;
@@ -26,7 +25,7 @@ uint32_t isqrt(uint32_t n) {
         mid = (lo + hi) >> 1;
     }
 
-    if (mul32x16(hi, hi) > n) return hi - 1;
+    if (hi * hi > n) return hi - 1;
     else return hi;
 }
 
