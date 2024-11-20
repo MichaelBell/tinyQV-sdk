@@ -7,6 +7,42 @@ uart_getc:
     andi a5, a5, 2
     beqz a5, 1f
     lw a0, 0x10(tp)
+
+/*  We should now just return.  But sadly on the TT06 tinyQV, UART RX always reads 0.
+    So the plan to workaround this is to make the RP2040 repeat every character.
+    When the character is read from the UART device that will unblock CTS so the RP2040
+    should immediately send the repeat.  We will then watch the UART receive pin for the 
+    repeated character and report it. */
+
+    /* Wait for in7 low (start condition) */
+2:
+    lw a0, 0x4(tp)
+    andi a0, a0, 0x80
+    bnez a0, 2b
+
+    /* Wait ~1.5 bit clocks for the first bit, then 1 bit clock for each bit */
+    rdcycle a1
+    addi a2, a1, 0  /*  ~0.5 bit clocks (64MHz = 31) */
+    li a3, 8
+4:
+    srli a0, a0, 1
+    addi a2, a2, 104  /* ~1 bit clock (64MHz = 69) */
+3:
+    rdcycle a1
+    bltu a1, a2, 3b
+    lw a4, 0x4(tp)
+    andi a4, a4, 0x80
+    add a0, a0, a4
+    addi a3, a3, -1
+    bnez a3, 4b
+
+    /* Now we need to wait for the character to be available from the UART block and clear it */
+5:
+    lw a1, 0x14(tp)
+    andi a1, a1, 2
+    beqz a1, 5b
+    lw a1, 0x10(tp)
+
 1:
     ret
 
