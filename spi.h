@@ -29,3 +29,4 @@ void spi_set_config(uint32_t config);
 
 // Send multiple bytes, ending the transaction if specified
 void spi_send_bytes(const uint8_t* data, int len, bool end_txn, bool set_dc);
+void spi_send_recv_bytes(const uint8_t* data_out, uint8_t* data_in, int len, bool end_txn, bool set_dc);
