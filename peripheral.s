@@ -6,6 +6,11 @@ uart_getc:
     lw a5, 0x14(tp)
     andi a5, a5, 2
     beqz a5, 1f
+
+    /* Disable interrupts to avoid timing of the below workaround going wrong */
+    li a3, 8
+    csrc mstatus, a3
+
     lw a0, 0x10(tp)
 
 /*  We should now just return.  But sadly on the TT06 tinyQV, UART RX always reads 0.
@@ -14,13 +19,8 @@ uart_getc:
     should immediately send the repeat.  We will then watch the UART receive pin for the 
     repeated character and report it. */
 
-    li a3, 8
-    li a5, 0x80
-
-    /* Disable interrupts */
-    csrc mstatus, a3
-
     /* Wait for in7 low (start condition) */
+    li a5, 0x80
 2:
     lw a0, 0x4(tp)
     and a0, a0, a5
