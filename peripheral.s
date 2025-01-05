@@ -17,6 +17,9 @@ uart_getc:
     li a3, 8
     li a5, 0x80
 
+    /* Disable interrupts */
+    csrc mstatus, a3
+
     /* Wait for in7 low (start condition) */
 2:
     lw a0, 0x4(tp)
@@ -36,6 +39,10 @@ uart_getc:
     add a0, a0, a4
     addi a3, a3, -1
     bnez a3, 4b
+
+    /* Re-enable interrupts */
+    li a3, 8
+    csrs mstatus, a3
 
     /* Now we need to wait for the character to be available from the UART block and clear it */
 5:
