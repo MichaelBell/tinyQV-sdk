@@ -16,6 +16,7 @@ SECTIONS
     .isrs : { *(.isrs*)
         KEEP (*(.isrs))
     } > rom
+    .early_text : { *(.early_text*) } > rom
     .text : { *(.text*) } > rom
     .rodata : { *(.rodata*) } > rom
 

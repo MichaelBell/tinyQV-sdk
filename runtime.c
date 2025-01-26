@@ -21,7 +21,7 @@ extern uint32_t __peri_lma;
 
 //int __errno;
 
-void __runtime_init(void) {
+void __attribute__((section(".early_text"))) __runtime_init(void) {
     for (uint32_t* ptr = &__bss_start__; ptr < &__bss_end__; ) //*ptr++ = 0;
         asm("sw4n x0, (%[p])\n\t"
             "addi %[p], %[p], 16\n\t" :
