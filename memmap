@@ -36,13 +36,14 @@ SECTIONS
     } > ram_a
 
     .data : { 
+        __data_start_unaligned__ = .;
         . = ALIGN(16);
         __data_start__ = .;
         *(.sdata*) *(.data*) 
         . = ALIGN(16);
         __data_end__ = .;
     } > ram_a AT> rom
-    __data_lma = LOADADDR(.data);
+    __data_lma = LOADADDR(.data) + __data_start__ - __data_start_unaligned__;
 
     .bss : { 
         . = ALIGN(16);
