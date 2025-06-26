@@ -11,7 +11,7 @@ isr_uart_writable:
 
     # Send the byte to the UART
     lbu s1, (a0)
-    sw s1, 0x10(tp)
+    sw s1, 0x80(tp)
 
     # Increment read pointer and compare with end of buffer
     addi a0, a0, 1
@@ -27,7 +27,7 @@ isr_uart_writable:
 
 1:
     # Nothing more to send, disable interrupt
-    li a0, 0x80000
+    li a0, 0x40000
     csrc mie, a0
     isr_exit
 
@@ -53,7 +53,7 @@ uart_putc:
 5:
     # Store the incremented write pointer, re-enable interrupts
     sw a1, uart_write_ptr, a0
-    li a1, 0x80000
+    li a1, 0x40000
     csrs mie, a1
     csrs mstatus, a3
     ret

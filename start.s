@@ -14,8 +14,8 @@ _boot:
 .section .vectors,"a"
     .word isr_in0    # 0x40-0x4c is vectors for the custom interrupts
     .word isr_in1
-    .word isr_uart_byte_available
     .word isr_uart_writable
+    .word isr_uart_byte_available
 
 .section .early_text
 .globl _start
