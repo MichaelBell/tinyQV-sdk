@@ -4,7 +4,7 @@
 uart_getc:
     li a0, -1
     lw a5, 0xc4(tp)
-    andi a5, a5, 2
+    andi a5, a5, 1
     beqz a5, 1f
     lw a0, 0xc0(tp)
 1:

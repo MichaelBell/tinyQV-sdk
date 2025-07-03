@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#define GPIO_FUNC_GPIO 1
+
 inline static void set_outputs(uint32_t value)
 {
     asm( "sw %[value], 0x40(tp)" : : [value] "r" (value) : "memory");
@@ -62,6 +64,12 @@ inline static void set_gpio_func(uint32_t gpio, uint32_t func)
 {
     volatile uint32_t* gpio_func_ptr = (volatile uint32_t*)0x8000060 + gpio;
     *gpio_func_ptr = func;
+}
+
+inline static uint32_t get_gpio_func(uint32_t gpio)
+{
+    volatile uint32_t* gpio_func_ptr = (volatile uint32_t*)0x8000060 + gpio;
+    return *gpio_func_ptr;
 }
 
 inline static void set_gpio_sel(uint32_t value) {
