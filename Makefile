@@ -4,7 +4,7 @@ CC = $(RISCV_TOOLCHAIN)/bin/riscv32-unknown-elf-gcc
 AS = $(RISCV_TOOLCHAIN)/bin/riscv32-unknown-elf-as
 AR = $(RISCV_TOOLCHAIN)/bin/riscv32-unknown-elf-ar
 
-all: tinyQV.a tinyQV-sd.a start.o
+all: tinyQV.a start.o
 
 clean:
 	rm -f *.o *.a fatfs/*.o sdcard/*.o
