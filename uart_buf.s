@@ -26,17 +26,17 @@ isr_uart_writable:
 
     # Store the incremented read pointer
     sw a0, uart_tx_read_ptr, s1
-    isr_exit
+    short_isr_exit
 2:
     la a0, uart_tx_buffer
     sw a0, uart_tx_read_ptr, s1
-    isr_exit
+    short_isr_exit
 
 1:
     # Nothing more to send, disable interrupt
     li a0, 0x80000
     csrc mie, a0
-    isr_exit
+    short_isr_exit
 
 .globl uart_putc
 uart_putc:
@@ -99,7 +99,7 @@ isr_uart_byte_available:
 
     # Save incremented write pointer
     sw s1, uart_rx_write_ptr, a0
-3:  isr_exit
+3:  short_isr_exit
 
 1:  la s1, uart_rx_buffer
     beq s1, a0, 3b
@@ -108,7 +108,7 @@ isr_uart_byte_available:
     lw a0, 0x80(tp)
     sb a0, -1(a1)
     sw s1, uart_rx_write_ptr, a0
-    isr_exit
+    short_isr_exit
 
 
 .globl uart_getc

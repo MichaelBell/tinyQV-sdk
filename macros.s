@@ -1,18 +1,24 @@
-.macro isr_entry
+.macro short_isr_entry
     .2byte 0xF028      # Save context, x9-x11 to gp-0x200
 .endm
 
-.macro isr_exit
+.macro short_isr_exit
     .2byte 0x3502      # Load context, x9-x11 from gp-0x200
     mret
 .endm
 
-.macro full_isr_entry    # Use after isr_entry to save all registers
+.macro full_isr_entry    # Use after short_isr_entry to save all registers
     sw4 x12, -0x1f4(gp)  # Save x12-x15 to gp-0x1f4 (following on from save context in isr_entry)
-    .2byte 0xFF1C        # Save context, x1-x8 to gp-0x1E0
+    mv s0, ra
+    mv s1, sp
+    sw4 x5, -0x1e4(gp)   # Save x5-x8
+    addi sp, gp, -0x80   # Gives 340 bytes of interrupt stack
 .endm
 
-.macro full_isr_exit     # Use instead of isr_exit
-    .2byte 0x3702        # Load context, x9-x15 from gp-0x200
-    .2byte 0x37BE        # Load context, x1-x8 from gp-0x1E0
+.macro isr_exit         # Exit from a full ISR
+    mv ra, s0
+    mv sp, s1
+    .2byte 0x3702       # Load context, x9-x15 from gp-0x200
+    lw4 x5, -0x1e4(gp)  # Load x5-x8
+    mret
 .endm

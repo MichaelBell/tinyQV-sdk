@@ -9,7 +9,7 @@ SECTIONS
     .boot : { *(.boot) 
         KEEP (*(.boot)) 
     } > rom
-    .vectors 0x40 : {
+    .vectors 0xc0 : {
         KEEP (*(.vectors))
     } > rom
     .srodata : { *(.srodata*) } > rom
@@ -30,9 +30,9 @@ SECTIONS
     } > ram_a AT> rom
     __peri_lma = LOADADDR(.peri);
 
-
+    /* Used for interrupt context and stack */
     .scratch 0x1000200 : {
-        . += 0xc0;
+        . += 0x180;
     } > ram_a
 
     .data : { 
@@ -45,7 +45,7 @@ SECTIONS
     } > ram_a AT> rom
     __data_lma = LOADADDR(.data) + __data_start__ - __data_start_unaligned__;
 
-    .bss : { 
+    .bss (NOLOAD): { 
         . = ALIGN(16);
         __bss_start__ = .;
         *(.sbss*) *(.bss*)
