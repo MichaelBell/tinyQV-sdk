@@ -1,22 +1,5 @@
 .section .text
 
-.globl uart_getc
-uart_getc:
-    li a0, -1
-    lw a5, 0x84(tp)
-    andi a5, a5, 2
-    beqz a5, 1f
-    lw a0, 0x80(tp)
-1:
-    ret
-
-.globl uart_is_char_available
-uart_is_char_available:
-    lw a0, 0x84(tp)
-    srli a0, a0, 1
-    andi a0, a0, 1
-    ret
-
 .globl debug_uart_putc
 debug_uart_putc:
     lw a5, 0x1c(tp)

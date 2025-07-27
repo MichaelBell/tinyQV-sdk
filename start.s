@@ -24,6 +24,8 @@ _start:
     li tp, 0x8000000    # a different Risc-V core, but do no harm on TinyQV
     la sp, __StackTop
     jal __runtime_init
+    li a1, 0x40000
+    csrs mie, a1
     call main
     j .
 
