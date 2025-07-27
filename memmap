@@ -53,8 +53,14 @@ SECTIONS
         __bss_end__ = .;
     } > ram_a
 
+    .uninitialized_data (NOLOAD): {
+        . = ALIGN(16);
+        *(.uninitialized_data*)
+    } > ram_a
+
     .heap (NOLOAD):
     {
+        . = ALIGN(4);
         __HeapStart = .;
         KEEP(*(.heap*))
         __HeapLimit = .;

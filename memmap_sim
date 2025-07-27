@@ -16,6 +16,7 @@ SECTIONS
     .isrs : { *(.isrs*)
         KEEP (*(.isrs))
     } > rom
+    .early_text : { *(.early_text*) } > rom
     .text : { *(.text*) } > rom
     .rodata : { *(.rodata*) } > rom
 
@@ -49,6 +50,11 @@ SECTIONS
         *(.sbss*) *(.bss*)
         . = ALIGN(16);
         __bss_end__ = .;
+    } > ram_a
+
+    .uninitialized_data (NOLOAD): {
+        . = ALIGN(16);
+        *(.uninitialized_data*)
     } > ram_a
 
     .heap (NOLOAD):

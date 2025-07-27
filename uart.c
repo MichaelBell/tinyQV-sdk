@@ -47,5 +47,11 @@ int uart_printf(const char *fmt, ...) {
     return rv;
 }
 
-char __attribute__((section(".peri_bss.uart"))) uart_tx_buffer[64+1];
-char __attribute__((section(".peri_bss.uart"))) uart_rx_buffer[64+1];
+char __attribute__((section(".uninitialized_data.uart"))) uart_tx_buffer[64];
+
+#ifndef TINYQV_SIM
+// The very large RX buffer is a hack to avoid the host needing flow control.  Fortunately we have plenty of RAM.
+char __attribute__((section(".uninitialized_data.uart"))) uart_rx_buffer[65536];
+#else
+char __attribute__((section(".uninitialized_data.uart"))) uart_rx_buffer[64];
+#endif

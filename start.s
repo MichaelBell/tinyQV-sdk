@@ -12,10 +12,22 @@ _boot:
     jalr s1, (s1)
 
 .section .vectors,"a"
-    .word isr_in0    # 0x40-0x4c is vectors for the custom interrupts
+    .word isr_in0    # 0x40-0x7c is vectors for the custom interrupts
     .word isr_in1
     .word isr_uart_byte_available
     .word isr_uart_writable
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
+    .word isr_user_unused
 
 .section .early_text
 .globl _start
@@ -34,10 +46,10 @@ _start:
 _trap_handler:
     mret
 
-# These ISRs are entered with only s1, a0 saved
+# These ISRs are entered with only s1, a0, a1 saved
 # The ISR must save and restore any other registers it modifies.
 # a0 is set to mcause on entry, so 1 << a0 is the corresponding bit in mip/mie
-.globl isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable
+.globl isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable, isr_user_unused
 .weak isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable
 isr_in0:  # Default implementation just acks the interrupt
 isr_in1:
@@ -48,7 +60,17 @@ isr_in1:
 
 isr_uart_byte_available:  # Default implementation clears interrupt enable 
 isr_uart_writable:        # to avoid an infinite interrupt loop
+isr_user_unused:
     li s1, 1
     sll s1, s1, a0
     csrc mie, s1
     isr_exit
+
+# TODO
+.globl isr_timer
+isr_timer:
+    full_isr_entry
+    li s1, 1
+    sll s1, s1, a0
+    csrc mie, s1
+    full_isr_exit
