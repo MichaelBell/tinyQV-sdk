@@ -8,12 +8,12 @@ _boot:
 .option rvc    
     short_isr_entry   # Interrupt, vectored here
     csrr a0, mcause
-    li a1, 7
-    beq a0, a1, _isr_timer
-    addi a1, a0, 0x20
-    slli a1, a1, 2
+    slli s1, a0, 2
+    li a1, 28
+    beq s1, a1, _isr_timer
+    addi a1, s1, 0x80
     lw a1, (a1)
-    andi s1, a0, 0xC
+    andi s1, s1, 0x30
     bnez s1, _isr_user
     jr a1
 

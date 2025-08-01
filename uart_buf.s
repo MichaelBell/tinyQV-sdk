@@ -44,7 +44,7 @@ uart_putc:
 
     # Disable interrupts as uart buffer ptrs aren't locked
     li a3, 0x8
-    csrc mstatus, a3
+    csrrc a3, mstatus, a3
 
     # Load the pointers and store the byte
     lw2 a1, uart_tx_write_ptr
@@ -118,7 +118,7 @@ uart_getc:
 
     # Disable interrupts as uart buffer ptrs aren't locked
     li a4, 0x8
-    csrc mstatus, a4
+    csrrc a4, mstatus, a4
 
     # Load pointers, check if any data is available
     lw2 a2, uart_rx_write_ptr
