@@ -99,7 +99,9 @@ isr_uart_byte_available:
 
     # Save incremented write pointer
     sw s1, uart_rx_write_ptr, a0
-3:  short_isr_exit
+3:  lh a0, uart_rx_interrupt_char
+    beq a0, a1, 4f
+    short_isr_exit
 
 1:  la s1, uart_rx_buffer
     beq s1, a0, 3b
@@ -108,6 +110,13 @@ isr_uart_byte_available:
     lw a0, 0x80(tp)
     sb a0, -1(a1)
     sw s1, uart_rx_write_ptr, a0
+    
+    lh a0, uart_rx_interrupt_char
+    beq a0, a1, 4f
+    short_isr_exit
+
+4:  li a0, 1
+    sb a0, uart_rx_interrupt_seen, a1
     short_isr_exit
 
 
@@ -158,3 +167,9 @@ uart_rx_write_ptr:
     .word uart_rx_buffer
 uart_rx_read_ptr:
     .word uart_rx_buffer
+
+.globl uart_rx_interrupt_char, uart_rx_interrupt_seen
+uart_rx_interrupt_char:
+    .hword 3
+uart_rx_interrupt_seen:
+    .byte 0

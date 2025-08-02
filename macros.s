@@ -12,7 +12,7 @@
     mv s0, ra
     mv s1, sp
     sw4 x5, -0x1e4(gp)   # Save x5-x8
-    addi sp, gp, -0x80   # Gives 340 bytes of interrupt stack
+    la sp, __interrupt_stack_top
 .endm
 
 .macro isr_exit         # Exit from a full ISR

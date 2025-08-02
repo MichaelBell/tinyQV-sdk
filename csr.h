@@ -32,3 +32,11 @@ inline static void delay_us(uint32_t us) {
         if ((int)time_diff <= 0) break;
     }
 }
+
+inline static void enable_interrupt(int peripheral_index) {
+    asm volatile ("csrs mie, %0" : : "r" (1u << (peripheral_index + 16)));
+}
+
+inline static void disable_interrupt(int peripheral_index) {
+    asm volatile ("csrc mie, %0" : : "r" (1u << (peripheral_index + 16)));
+}
