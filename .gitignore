@@ -2,3 +2,6 @@
 *.a
 *.swp
 toolchain/**
+example.bin
+example.elf
+example.hex

@@ -8,11 +8,11 @@ Get the [customised Risc-V GNU toolchain](https://github.com/MichaelBell/riscv-g
 
 Either download the release from that repo, or clone it and make with:
 
-    ./configure --prefix=/opt/riscv --with-arch=rv32ec --with-abi=ilp32e
+    ./configure --prefix=/opt/tinyQV --with-arch=rv32ec_zcb_zicond --with-abi=ilp32e
     make
-
-You may want to use a different prefix.
 
 Note that this takes a while, especially first time as it downloads a bunch of submodules as part of the build process.
 
-Use the example-project-Makefile as a template Makefile for your project.
+If the toolchain is not installed in /opt/tinyQV, then set the `RISCV_TOOLCHAIN` environment variable appropriately.
+
+Use the `example-project` as a template for your project if building for full TinyQV, or `example-sim-project` if building for simulation (with limited RAM and flash).
