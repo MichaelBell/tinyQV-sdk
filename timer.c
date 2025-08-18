@@ -4,18 +4,18 @@
 
 inline static void set_mtime(uint32_t value)
 {
-    asm( "sw %[value], -0x100(x0)" : : [value] "r" (value) : "memory");
+    asm volatile ( "sw %[value], -0x100(x0)" : : [value] "r" (value));
 }
 
 inline static void set_mtimecmp(uint32_t value)
 {
-    asm( "sw %[value], -0xfc(x0)" : : [value] "r" (value) : "memory");
+    asm volatile ( "sw %[value], -0xfc(x0)" : : [value] "r" (value));
 }
 
 inline static uint32_t get_mtimecmp()
 {
     uint32_t value;
-    asm( "lw %[value], -0xfc(x0)" : [value] "=r" (value) : : "memory");
+    asm volatile ( "lw %[value], -0xfc(x0)" : [value] "=r" (value));
     return value;
 }
 

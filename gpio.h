@@ -11,14 +11,14 @@
 // Low is debug mode, high is normal mode.  Set to 0xff to make all outputs available.
 inline static void set_debug_sel(uint32_t value)
 {
-    asm( "sw %[value], 0xc(tp)" : : [value] "r" (value) : "memory");
+    asm volatile ( "sw %[value], 0xc(tp)" : : [value] "r" (value));
 }
 
 // Read the output debug select register
 inline static uint32_t get_debug_sel()
 {
     uint32_t value;
-    asm( "lw %[value], 0xc(tp)" : [value] "=r" (value) : : "memory");
+    asm volatile ( "lw %[value], 0xc(tp)" : [value] "=r" (value));
     return value;
 }
 
@@ -26,7 +26,7 @@ inline static uint32_t get_debug_sel()
 // file by the currently executing instruction
 inline static void set_register_debug(bool enable)
 {
-    asm( "sw %[value], 0x30(tp)" : : [value] "r" (enable ? 1 : 0) : "memory");
+    asm volatile ( "sw %[value], 0x30(tp)" : : [value] "r" (enable ? 1 : 0));
 }
 
 // Convenience methods to disable debug on all outputs
@@ -54,14 +54,14 @@ inline static uint32_t get_gpio_func(uint32_t gpio)
 // reflected on output pins for outputs set to function 1 (GPIO).
 inline static void set_outputs(uint32_t value)
 {
-    asm( "sw %[value], 0x40(tp)" : : [value] "r" (value) : "memory");
+    asm volatile ( "sw %[value], 0x40(tp)" : : [value] "r" (value));
 }
 
 // Get the level of all outputs being requested from the GPIO peripheral.
 inline static uint32_t get_outputs()
 {
     uint32_t value;
-    asm( "lw %[value], 0x40(tp)" : [value] "=r" (value) : : "memory");
+    asm volatile ( "lw %[value], 0x40(tp)" : [value] "=r" (value));
     return value;
 }
 
@@ -83,7 +83,7 @@ inline static void gpio_off(int gpio)
 inline static uint32_t get_inputs()
 {
     uint32_t value;
-    asm volatile ( "lw %[value], 0x44(tp)" : [value] "=r" (value) : : "memory");
+    asm volatile ( "lw %[value], 0x44(tp)" : [value] "=r" (value));
     return value;
 }
 
