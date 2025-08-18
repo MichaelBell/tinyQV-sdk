@@ -42,8 +42,7 @@
 #define CT_SDC         (CT_SD1|CT_SD2) /* SD */
 #define CT_BLOCK       0x08            /* Block addressing */
 
-#define CLK_SLOW	(100 * KHZ)
-#define CLK_FAST	(30 * MHZ)
+#define CS_PIN 4
 
 static volatile
 DSTATUS Stat = STA_NOINIT;	/* Physical drive status */
@@ -77,22 +76,22 @@ static inline void cs_deselect(int cs_pin) {
 
 static void FCLK_SLOW(void)
 {
-	spi_set_config(3);
+	spi_set_config(15);
 }
 
 static void FCLK_FAST(void)
 {
-	spi_set_config(0);
+	spi_set_config(0x80);
 }
 
 static void CS_HIGH(void)
 {
-    cs_deselect(7);
+    cs_deselect(CS_PIN);
 }
 
 static void CS_LOW(void)
 {
-    cs_select(7);
+    cs_select(CS_PIN);
 }
 
 /* Initialize MMC interface */
@@ -102,11 +101,9 @@ void init_spi(void)
 	/* chip _select invalid*/
 	CS_HIGH();
 
-	uint32_t gpio_sel = get_gpio_sel();
-	gpio_sel |=  0b10000000;
-	gpio_sel &= ~0b00101000;
-	set_gpio_sel(gpio_sel);
-	printf("Set GPIO sel %02lx\n", gpio_sel);
+	set_gpio_func(3, 30);  // SPI MOSI
+	set_gpio_func(4, 1);   // GPIO for CS
+	set_gpio_func(5, 30);  // SPI SCK
 }
 
 /* Exchange a byte */
@@ -115,7 +112,7 @@ BYTE xchg_spi (
 	BYTE dat	/* Data to send */
 )
 {
-	return (BYTE) spi_send_recv_data(dat | 0x100);
+	return (BYTE) spi_send_recv_data(dat, 0);
 }
 
 
@@ -127,7 +124,7 @@ void rcvr_spi_multi (
 )
 {
 	uint8_t *b = (uint8_t *) buff;
-	while (btr--) *b++ = spi_send_recv_data(0x1ff);
+	while (btr--) *b++ = spi_send_recv_data(0xff, 0);
 }
 
 

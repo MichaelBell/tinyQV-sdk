@@ -10,26 +10,28 @@ debug_uart_putc:
 
 .globl spi_send_data
 spi_send_data:
-    lw a5, 0x24(tp)
-    andi a5, a5, 1
+    lbu a5, 0x4e0(tp)
+    andi a5, a5, 2
     bnez a5, spi_send_data
-    sw a0, 0x20(tp)
+    sb a1, 0x4e0(tp)
+    sb a0, 0x4e1(tp)
     ret
 
 .globl spi_send_recv_data
 spi_send_recv_data:
-    lw a5, 0x24(tp)
+    lbu a5, 0x4e0(tp)
     andi a5, a5, 1
     bnez a5, spi_send_recv_data
-    sw a0, 0x20(tp)
+    sb a1, 0x4e0(tp)
+    sb a0, 0x4e1(tp)
 1:
-    lw a5, 0x24(tp)
+    lbu a5, 0x4e0(tp)
     andi a5, a5, 1
     bnez a5, 1b
-    lw a0, 0x20(tp)
+    lbu a0, 0x4e2(tp)
     ret
 
 .globl spi_set_config
 spi_set_config:
-    sw a0, 0x24(tp)
+    sb a0, 0x4e4(tp)
     ret
