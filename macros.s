@@ -9,9 +9,9 @@
 
 .macro full_isr_entry    # Use after short_isr_entry to save all registers
     sw4 x12, -0x1f4(gp)  # Save x12-x15 to gp-0x1f4 (following on from save context in isr_entry)
+    sw4 x5, -0x1e4(gp)   # Save x5-x8
     mv s0, ra
     mv s1, sp
-    sw4 x5, -0x1e4(gp)   # Save x5-x8
     la sp, __interrupt_stack_top
 .endm
 
