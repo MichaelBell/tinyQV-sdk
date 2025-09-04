@@ -13,8 +13,6 @@ _boot:
     beq s1, a1, _isr_timer
     addi a1, s1, 0x80
     lw a1, (a1)
-    andi s1, s1, 0x30
-    bnez s1, _isr_user
     jr a1
 
 _start:
@@ -36,17 +34,51 @@ _isr_timer:
     call tqv_timer_interrupt
     isr_exit
 
-_isr_user:
+# Raw interrupt redirects, this allows a specific low-level interrupt function to be
+# installed simply by defining a function tqv_user_interruptnn_raw.
+# On entry only s1, a0 and a1 are saved.  There is no stack.  The short_isr_exit macro would normally be used to return.
+.globl tqv_user_interrupt04_raw, tqv_user_interrupt05_raw, tqv_user_interrupt06_raw, tqv_user_interrupt07_raw
+.globl tqv_user_interrupt08_raw, tqv_user_interrupt09_raw, tqv_user_interrupt10_raw, tqv_user_interrupt11_raw
+.globl tqv_user_interrupt12_raw, tqv_user_interrupt13_raw, tqv_user_interrupt14_raw, tqv_user_interrupt15_raw
+.weak tqv_user_interrupt04_raw, tqv_user_interrupt05_raw, tqv_user_interrupt06_raw, tqv_user_interrupt07_raw
+.weak tqv_user_interrupt08_raw, tqv_user_interrupt09_raw, tqv_user_interrupt10_raw, tqv_user_interrupt11_raw
+.weak tqv_user_interrupt12_raw, tqv_user_interrupt13_raw, tqv_user_interrupt14_raw, tqv_user_interrupt15_raw
+tqv_user_interrupt04_raw:
+tqv_user_interrupt05_raw:
+tqv_user_interrupt06_raw:
+tqv_user_interrupt07_raw:
+tqv_user_interrupt08_raw:
+tqv_user_interrupt09_raw:
+tqv_user_interrupt10_raw:
+tqv_user_interrupt11_raw:
+tqv_user_interrupt12_raw:
+tqv_user_interrupt13_raw:
+tqv_user_interrupt14_raw:
+tqv_user_interrupt15_raw:
+    addi a1, s1, 0xb0
     full_isr_entry
+    lw a1, (a1)
     jalr ra, (a1)
     isr_exit
 
 .section .vectors,"a"
-    .word isr_in0    # 0xc0-0xfc is vectors for the custom interrupts
+    .word isr_in0    # 0xc0-0xfc is vectors for the raw interrupts
     .word isr_in1
     .word isr_uart_byte_available
     .word isr_uart_writable
-    .word tqv_user_interrupt04
+    .word tqv_user_interrupt04_raw
+    .word tqv_user_interrupt05_raw
+    .word tqv_user_interrupt06_raw
+    .word tqv_user_interrupt07_raw
+    .word tqv_user_interrupt08_raw
+    .word tqv_user_interrupt09_raw
+    .word tqv_user_interrupt10_raw
+    .word tqv_user_interrupt11_raw
+    .word tqv_user_interrupt12_raw
+    .word tqv_user_interrupt13_raw
+    .word tqv_user_interrupt14_raw
+    .word tqv_user_interrupt15_raw
+    .word tqv_user_interrupt04     # 0x100-0x12c is vectors for the custom interrupts (with full context saved)
     .word tqv_user_interrupt05
     .word tqv_user_interrupt06
     .word tqv_user_interrupt07
