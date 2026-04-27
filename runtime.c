@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include "uart.h"
+#include "gpio.h"
 
 extern char __HeapLimit; /* Set by linker.  */
 extern char __HeapStart; /* Set by linker.  */
@@ -40,6 +41,10 @@ void __attribute__((section(".early_text"))) __runtime_init(void) {
             :
             "a0", "a1", "a2", "a3"
             );
+    
+    // Change UART CTS pin to out5 instead of out1 to match ETR demo board
+    set_gpio_func(5, 2);
+    set_gpio_func(1, 1);
 }
 
 void *_sbrk(int incr) {
