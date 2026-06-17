@@ -1,5 +1,30 @@
 .section .text
 
+.globl uart_putc
+uart_putc:
+    lw a5, 0x14(tp)
+    andi a5, a5, 1
+    bnez a5, uart_putc
+    sw a0, 0x10(tp)
+    ret
+
+.globl uart_getc
+uart_getc:
+    li a0, -1
+    lw a5, 0x14(tp)
+    andi a5, a5, 2
+    beqz a5, 1f
+    lw a0, 0x10(tp)
+1:
+    ret
+
+.globl uart_is_char_available
+uart_is_char_available:
+    lw a0, 0x14(tp)
+    srli a0, a0, 1
+    andi a0, a0, 1
+    ret
+
 .globl debug_uart_putc
 debug_uart_putc:
     lw a5, 0x1c(tp)
@@ -10,28 +35,26 @@ debug_uart_putc:
 
 .globl spi_send_data
 spi_send_data:
-    lbu a5, 0x4e0(tp)
-    andi a5, a5, 2
+    lw a5, 0x24(tp)
+    andi a5, a5, 1
     bnez a5, spi_send_data
-    sb a1, 0x4e0(tp)
-    sb a0, 0x4e1(tp)
+    sw a0, 0x20(tp)
     ret
 
 .globl spi_send_recv_data
 spi_send_recv_data:
-    lbu a5, 0x4e0(tp)
+    lw a5, 0x24(tp)
     andi a5, a5, 1
     bnez a5, spi_send_recv_data
-    sb a1, 0x4e0(tp)
-    sb a0, 0x4e1(tp)
+    sw a0, 0x20(tp)
 1:
-    lbu a5, 0x4e0(tp)
+    lw a5, 0x24(tp)
     andi a5, a5, 1
     bnez a5, 1b
-    lbu a0, 0x4e2(tp)
+    lw a0, 0x20(tp)
     ret
 
 .globl spi_set_config
 spi_set_config:
-    sb a0, 0x4e4(tp)
+    sw a0, 0x24(tp)
     ret
