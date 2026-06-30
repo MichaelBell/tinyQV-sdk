@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define TINYQV_SPI_PERIPHERAL_NUM 30
+
 // Low level SPI send function.  Ctrl is:
 //   Bit 2: High to end txn, if low CS remains asserted after byte is sent
 //   Bit 3: DC control
