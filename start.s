@@ -11,8 +11,7 @@ _boot:
     slli s1, a0, 2
     li a1, 28
     beq s1, a1, _isr_timer
-    addi a1, s1, 0x80
-    lw a1, (a1)
+    lw a1, 0x80(s1)
     jr a1
 
 _start:
