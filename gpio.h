@@ -5,7 +5,8 @@
 
 #define PERI_IDX_GPIO 1
 
-#define PERI_BASE_ADDRESS(PERI_IDX) ((PERI_IDX) < 16 ? 0x8000000 + 0x40 * (PERI_IDX) : 0x8000300 + 0x10 * (PERI_IDX))
+#define PERI_BASE_ADDRESS(PERI_IDX) ((PERI_IDX) < 16 ? 0x8000000 + 0x40 * (PERI_IDX) : \
+                                     (PERI_IDX) < 32 ? 0x8000300 + 0x10 * (PERI_IDX) : 0x8000600 + 0x40 * (PERI_IDX - 32))
 
 // Set the output debug select register, each bit selects the debug mode for that output.
 // Low is debug mode, high is normal mode.  Set to 0xff to make all outputs available.
