@@ -95,8 +95,8 @@ tqv_user_interrupt15_raw:
 # These ISRs are entered with only s1, a0, a1 saved
 # The ISR must save and restore any other registers it modifies.
 # a0 is set to mcause on entry, so 1 << a0 is the corresponding bit in mip/mie
-.globl isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable, tqv_timer_interrupt
-.weak isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable, tqv_timer_interrupt
+.globl isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable
+.weak isr_in0, isr_in1, isr_uart_byte_available, isr_uart_writable
 isr_in0:  # Default implementation just acks the interrupt
 isr_in1:
     li a1, 1
@@ -110,12 +110,6 @@ isr_uart_writable:        # to avoid an infinite interrupt loop
     sll a1, a1, a0
     csrc mie, a1
     short_isr_exit
-
-# This is designed to be implemented in C, it's a normal function.
-tqv_timer_interrupt:      # Default implementation just clears interrupt enable
-    li a0, 0x80
-    csrc mie, a0
-    ret
 
 # Interrupt redirects, this allows a specific interrupt function to be
 # installed simply by defining a function tqv_user_interruptnn
