@@ -16,14 +16,14 @@ jobs:
       run: |
         mkdir toolchain
         cd toolchain
-        wget https://github.com/MichaelBell/riscv-gnu-toolchain/releases/download/13.2.0-tqv-1.0/riscv32ec-13.2.0-tqv-1.0.tar.gz
+        wget https://github.com/MichaelBell/riscv-gnu-toolchain/releases/download/16.1.0-tqv-2.1/riscv32ec-16.1.0-tqv-2.1.tar.gz
         tar xzf riscv32ec*.tar.gz
 
     - name: build
       run: |
-        RISCV_TOOLCHAIN=$PWD/toolchain/riscv make
+        RISCV_TOOLCHAIN=$PWD/toolchain/tinyQV make
         cd pngdec
-        RISCV_TOOLCHAIN=$PWD/../toolchain/riscv make
+        RISCV_TOOLCHAIN=$PWD/../toolchain/tinyQV make
 
     - name: upload libs
       uses: actions/upload-artifact@v4
