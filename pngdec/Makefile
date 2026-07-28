@@ -10,7 +10,7 @@ clean:
 	rm -f *.o *.a fatfs/*.o sdcard/*.o
 
 %.o: %.c 
-	$(CC) -O2 -march=rv32ec_zcb -mabi=ilp32e -nostdlib -nostartfiles -ffreestanding -ffunction-sections -fdata-sections -Wall -Werror -lc -I$(PWD) -c $< -o $@
+	$(CC) -O2 -march=rv32ec_zcb -mabi=ilp32e -nostdlib -nostartfiles -ffreestanding -ffunction-sections -fdata-sections -Wall -Werror -Wno-error=old-style-definition -lc -I$(PWD) -c $< -o $@
 
 %.o: %.s
 	$(AS) -march=rv32ec_zicsr_zcb -mabi=ilp32e $< -o $@
