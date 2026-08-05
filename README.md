@@ -8,7 +8,7 @@ Get the [customised Risc-V GNU toolchain](https://github.com/MichaelBell/riscv-g
 
 Either download the release from that repo, or clone it and make with:
 
-    ./configure --prefix=/opt/tinyQV --with-arch=rv32ec_zcb_zicond --with-abi=ilp32e
+    ./configure --prefix=/opt/tinyQV --with-arch=rv32ec_zcb_zicond_zilsd --with-abi=ilp32e
     make
 
 Note that this takes a while, especially first time as it downloads a bunch of submodules as part of the build process.
