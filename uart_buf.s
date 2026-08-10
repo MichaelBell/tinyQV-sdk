@@ -148,12 +148,13 @@ uart_getc:
 
 .globl uart_is_char_available
 uart_is_char_available:
+    # Returns 1 when a received byte is waiting (write ptr != read ptr).
     lw2 a2, uart_rx_write_ptr
     beq a2, a3, 1f
-    li a0, 0
+    li a0, 1
     ret
 
-1:  li a0, 1
+1:  li a0, 0
     ret
 
 
