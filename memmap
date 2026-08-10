@@ -15,6 +15,15 @@ SECTIONS
     .srodata : { *(.srodata*) } > rom
     .early_text : { *(.early_text*) } > rom
     .text : { *(.text*) } > rom
+    /* C++ global constructor pointers; walked by __runtime_init.
+       (No .fini_array: embedded firmware never exits.) */
+    .init_array : {
+        . = ALIGN(4);
+        __init_array_start = .;
+        KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*)))
+        KEEP (*(.init_array))
+        __init_array_end = .;
+    } > rom
     .rodata : { *(.rodata*) } > rom
 
     .peri : {
@@ -72,4 +81,5 @@ SECTIONS
     __StackTop = ORIGIN(ram_a) + LENGTH(ram_a);
     __StackLimit = __StackTop - 0x1000;
     ASSERT(__StackLimit >= __interrupt_stack_top, "region RAM overflowed")
+    ASSERT(__HeapLimit >= __HeapStart, "no room for heap in ram_b")
 }
