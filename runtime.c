@@ -45,6 +45,16 @@ void __attribute__((section(".early_text"))) __runtime_init(void) {
     // Change UART CTS pin to out5 instead of out1 to match ETR demo board
     set_gpio_func(5, 2);
     set_gpio_func(1, 1);
+
+    // C++ global constructors (.init_array, empty for pure C builds).
+    // Runs after .data/.bss so constructors see initialized globals.
+    {
+        typedef void (*init_fn)(void);
+        extern init_fn __init_array_start[];
+        extern init_fn __init_array_end[];
+        for (init_fn *f = __init_array_start; f != __init_array_end; ++f)
+            (*f)();
+    }
 }
 
 void *_sbrk(int incr) {
@@ -97,8 +107,16 @@ int _read(int handle, char *buffer, int length) {
     return -1;
 }
 
+// Optional stdout redirection: when set, printf() output goes through
+// the hook instead of the UART.  A full-screen UI can install one
+// to pre-process output so output lands in its UI management code
+// instead of corrupting the display.
+int (*__tinyqv_stdout_hook)(const char *buffer, int length) = NULL;
+
 int _write(int handle, char *buffer, int length) {
     if (handle == STDIO_HANDLE_STDOUT) {
+        if (__tinyqv_stdout_hook)
+            return __tinyqv_stdout_hook(buffer, length);
         uart_put_buffer(buffer, length);
         return length;
     }
