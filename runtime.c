@@ -42,9 +42,13 @@ void __attribute__((section(".early_text"))) __runtime_init(void) {
             "a0", "a1", "a2", "a3"
             );
     
-    // Change UART CTS pin to out5 instead of out1 to match ETR demo board
-    set_gpio_func(5, 2);
-    set_gpio_func(1, 1);
+    // Change UART RX pin to the dedicated pin
+    volatile uint32_t* uart_rx_select = (uint32_t*)0x800008c;
+    *uart_rx_select = 2;
+
+    // Turn off debug register mode
+    volatile uint32_t* peri_debug = (uint32_t*)0x8000030;
+    *peri_debug = 0;
 
     // C++ global constructors (.init_array, empty for pure C builds).
     // Runs after .data/.bss so constructors see initialized globals.
