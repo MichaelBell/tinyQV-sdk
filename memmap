@@ -44,11 +44,6 @@ SECTIONS
     } > ram_a AT> rom :peri
     __peri_lma = LOADADDR(.peri);
 
-    /* Used for interrupt context */
-    .scratch 0x1000200 : {
-        . += 0x30;
-    } > ram_a :NONE
-
     .data : { 
         __data_start_unaligned__ = .;
         . = ALIGN(16);
