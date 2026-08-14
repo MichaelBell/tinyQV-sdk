@@ -4,17 +4,25 @@ MEMORY
     ram_a(rw) : ORIGIN = 0x1000000, LENGTH = 0x0800000
     ram_b(rw) : ORIGIN = 0x1800000, LENGTH = 0x0800000
 }
+PHDRS
+{
+    text   PT_LOAD FLAGS(5); /* R-X */
+    ctors  PT_LOAD FLAGS(6); /* RW- */
+    peri   PT_LOAD FLAGS(6); /* RW- */
+    data   PT_LOAD FLAGS(6); /* RW- */
+    heap   PT_LOAD FLAGS(6); /* RW- */
+}
 SECTIONS
 {
     .boot : { *(.boot) 
         KEEP (*(.boot)) 
-    } > rom
+    } > rom :text
     .vectors 0xc0 : {
         KEEP (*(.vectors))
-    } > rom
-    .srodata : { *(.srodata*) } > rom
-    .early_text : { *(.early_text*) } > rom
-    .text : { *(.text*) } > rom
+    } > rom :text
+    .srodata : { *(.srodata*) } > rom :text
+    .early_text : { *(.early_text*) } > rom :text
+    .text : { *(.text*) } > rom :text
     /* C++ global constructor pointers; walked by __runtime_init.
        (No .fini_array: embedded firmware never exits.) */
     .init_array : {
@@ -23,8 +31,8 @@ SECTIONS
         KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*)))
         KEEP (*(.init_array))
         __init_array_end = .;
-    } > rom
-    .rodata : { *(.rodata*) } > rom
+    } > rom :ctors
+    .rodata : { *(.rodata*) } > rom :text
 
     .peri : {
         . = ALIGN(4);
@@ -33,13 +41,13 @@ SECTIONS
         . = ALIGN(4);
         __peri_data_end__ = .;
         *(.peri_bss*)
-    } > ram_a AT> rom
+    } > ram_a AT> rom :peri
     __peri_lma = LOADADDR(.peri);
 
     /* Used for interrupt context */
     .scratch 0x1000200 : {
         . += 0x30;
-    } > ram_a
+    } > ram_a :NONE
 
     .data : { 
         __data_start_unaligned__ = .;
@@ -48,7 +56,7 @@ SECTIONS
         *(.sdata*) *(.data*) 
         . = ALIGN(16);
         __data_end__ = .;
-    } > ram_a AT> rom
+    } > ram_a AT> rom :data
     __data_lma = LOADADDR(.data) + __data_start__ - __data_start_unaligned__;
 
     .bss (NOLOAD): { 
@@ -57,7 +65,7 @@ SECTIONS
         *(.sbss*) *(.bss*)
         . = ALIGN(16);
         __bss_end__ = .;
-    } > ram_a
+    } > ram_a :data
 
     .uninitialized_data (NOLOAD): {
         . = ALIGN(16);
@@ -67,7 +75,7 @@ SECTIONS
         . = ALIGN(16);
         . += 0x1000;
         __interrupt_stack_top = .;
-    } > ram_a
+    } > ram_a :NONE
 
     .heap (NOLOAD):
     {
@@ -75,7 +83,7 @@ SECTIONS
         __HeapStart = .;
         KEEP(*(.heap*))
         __HeapLimit = .;
-    } > ram_b
+    } > ram_b :heap
 
     __global_pointer$ = 0x1000400;
     __StackTop = ORIGIN(ram_a) + LENGTH(ram_a);
