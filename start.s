@@ -33,6 +33,8 @@ _isr_timer:
     call tqv_timer_interrupt
     isr_exit
 
+.section .early_text,"ax"
+
 # Raw interrupt redirects, this allows a specific low-level interrupt function to be
 # installed simply by defining a function tqv_user_interruptnn_raw.
 # On entry only s1, a0 and a1 are saved.  There is no stack.  The short_isr_exit macro would normally be used to return.
