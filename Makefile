@@ -21,10 +21,10 @@ uart_sim.o: uart.c
 uart_buf_sim.o: uart_buf.s
 	$(AS) --defsym TINYQV_SIM=1 -march=rv32ec_zicsr_zcb_zicond -mabi=ilp32e $< -o $@
 
-tinyQV.a: uart.o uart_buf.o mul.o isqrt.o peripheral.o runtime.o spi.o timer.o
+tinyQV.a: uart.o uart_buf.o mul.o isqrt.o peripheral.o runtime.o spi.o timer.o prism.o
 	$(AR) rcs $@ $^
 
-tinyQV-sim.a: uart_sim.o uart_buf_sim.o mul.o isqrt.o peripheral.o runtime.o spi.o timer.o
+tinyQV-sim.a: uart_sim.o uart_buf_sim.o mul.o isqrt.o peripheral.o runtime.o spi.o timer.o prism.o
 	$(AR) rcs $@ $^
 
 tinyQV-sd.a: sdcard/sdcard.o fatfs/ff.o fatfs/ffsystem.o fatfs/ffunicode.o
