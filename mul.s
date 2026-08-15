@@ -36,11 +36,11 @@ __muldi3:
     slli a0, a0, 16
     add a0, a0, a5
     add a1, a0, t2
-    slli t2, t1, 16
+    srli t2, t1, 16
+    slli t1, t1, 16
     lw t0, -4(sp)
-    add a0, t0, t2
-    sltu t2, a0, t0
+    add a0, t0, t1
+    sltu t1, a0, t0
     add a1, a1, t2
-    srli t1, t1, 16
     add a1, a1, t1
     ret
