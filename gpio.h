@@ -96,3 +96,7 @@ inline static void set_gpio_sel(uint32_t value) {
         value >>= 1;
     }
 }
+
+inline static void set_audio_func_sel(uint32_t value) {
+    asm volatile ( "sw %[value], 0x50(tp)" : : [value] "r" (value));
+}
