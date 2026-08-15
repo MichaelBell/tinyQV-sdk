@@ -21,6 +21,7 @@ jobs:
     - name: build
       run: |
         RISCV_TOOLCHAIN=$PWD/toolchain/tinyQV make
+        RISCV_TOOLCHAIN=$PWD/toolchain/tinyQV make tinyQV-sd.a
         cd pngdec
         RISCV_TOOLCHAIN=$PWD/../toolchain/tinyQV make
 
@@ -30,5 +31,6 @@ jobs:
         name: tinyQV-sdk
         path: |
           tinyQV.a
+          tinyQV-asteroids.a
           tinyQV-sd.a
           pngdec/tinyQV-pngdec.a
