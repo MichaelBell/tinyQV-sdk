@@ -79,15 +79,14 @@ SECTIONS
 
     .heap (NOLOAD):
     {
-        . = ALIGN(4);
+        . = ALIGN(16);
         __HeapStart = .;
         KEEP(*(.heap*))
         __HeapLimit = .;
-    } > ram_b :heap
+    } > ram_a :heap
 
     __global_pointer$ = 0x1000400;
     __StackTop = ORIGIN(ram_a) + LENGTH(ram_a);
     __StackLimit = __StackTop - 0x1000;
-    ASSERT(__StackLimit >= __interrupt_stack_top, "region RAM overflowed")
-    ASSERT(__HeapLimit >= __HeapStart, "no room for heap in ram_b")
+    ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed")
 }
